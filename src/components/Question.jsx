@@ -9,6 +9,20 @@ export default function Question({ index, onSelectAnswer, onSkipAnswer }) {
     selectedAnswer: "",
     isCorrect: null,
   });
+
+  let timer = 3000;
+  let timerKey = "unselected";
+  const selectAnswerWaitTime = 1000;
+  const checkAnswerWaitTime = 1500;
+  if (answer.selectedAnswer) {
+    timer = selectAnswerWaitTime;
+    timerKey = "selected";
+  }
+  if (answer.isCorrect !== null) {
+    timer = checkAnswerWaitTime;
+    timerKey = "checked";
+  }
+
   function handleSelectAnswer(answer) {
     setAnswer({
       selectedAnswer: "answered",
@@ -22,8 +36,8 @@ export default function Question({ index, onSelectAnswer, onSkipAnswer }) {
       });
       setTimeout(() => {
         onSelectAnswer(answer);
-      }, 500);
-    }, 500);
+      }, checkAnswerWaitTime);
+    }, selectAnswerWaitTime);
   }
 
   let answerState = "";
@@ -32,9 +46,15 @@ export default function Question({ index, onSelectAnswer, onSkipAnswer }) {
   } else if (answer.selectedAnswer) {
     answerState = "answered";
   }
+
   return (
     <div id="question">
-      <QuestionTimer timeout={2000} onTimeout={onSkipAnswer}></QuestionTimer>
+      <QuestionTimer
+        key={timerKey}
+        timeout={timer}
+        onTimeout={answer.selectedAnswer !== "" ? null : onSkipAnswer}
+        mode={answerState}
+      ></QuestionTimer>
       <h2>{QUESTIONS[index].text}</h2>
       <Answers
         answers={QUESTIONS[index].answers}
