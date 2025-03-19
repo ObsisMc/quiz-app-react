@@ -11,7 +11,7 @@ export default function Question({
 }) {
   return (
     <div id="question">
-      <QuestionTimer timeout={5000} onTimeout={onSkipAnswer}></QuestionTimer>
+      <QuestionTimer timeout={2000} onTimeout={onSkipAnswer}></QuestionTimer>
       <h2>{questionText}</h2>
       <Answers
         answers={answers}
